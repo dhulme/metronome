@@ -2,8 +2,9 @@
   <v-app>
     <main>
       <v-container>
-        <v-text-field v-model="bpm"></v-text-field>
-        <v-btn color="primary">Start</v-btn>
+        <v-text-field v-model="timeSignature" label="Time Signature"></v-text-field>
+        <v-text-field v-model="bpm" label="BPM"></v-text-field>
+        <v-btn color="primary" @click="toggleRunning">{{ running ? 'Stop' : 'Start' }}</v-btn>
       </v-container>
     </main>
   </v-app>
@@ -18,38 +19,52 @@
       return {
         bpm: 128,
         running: false,
-        interval: null,
-        beats: 4,
-        measure: 4,
-        count: 0
+        count: 0,
+        totalCount: 1,
+        time: performance.now(),
+        timeSignature: '4/4'
       };
     },
     computed: {
-      intervalTimeout() {
-        return (60 * 1000) / this.bpm;
+      interval() {
+        return (60 * 1000) / (this.bpm * (this.measure / 4));
+      },
+      beats() {
+        return Number(this.timeSignature.split('/')[0]);
+      },
+      measure() {
+        return Number(this.timeSignature.split('/')[1]);
       }
     },
     watch: {
-      bpm() {
-        clearInterval(this.interval);
-      }
+      bpm: 'reset'
     },
     mounted() {
-      let time = performance.now();
-      let count = 1;
       const frame = () => {
-        const now = performance.now();
-        const d = now - time;
-        if (d / count > this.intervalTimeout) {
+        const d = performance.now() - this.time;
+        if (d / this.totalCount > this.interval) {
           this.tick();
-          count++;
+          this.totalCount++;
         }
         requestAnimationFrame(frame);
       }
       requestAnimationFrame(frame);
     },
     methods: {
+      toggleRunning() {
+        this.running = !this.running;
+        this.reset();
+      },
+      reset() {
+        this.totalCount = 1;
+        this.count = 0;
+        this.time = performance.now();
+      },
       tick() {
+        if (!this.running) {
+          return;
+        }
+
         if (this.count === this.beats) {
           this.count = 0;
         }
