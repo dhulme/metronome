@@ -2,9 +2,12 @@
   <v-app>
     <main>
       <v-container>
+        <h1>Metronome</h1>
         <v-text-field v-model="timeSignature" label="Time Signature"></v-text-field>
-        <v-text-field v-model="bpm" label="BPM"></v-text-field>
-        <v-btn color="primary" @click="toggleRunning">{{ running ? 'Stop' : 'Start' }}</v-btn>
+        <v-text-field v-model="bpm" label="BPM" type="number"></v-text-field>
+        <v-btn color="primary" large @click="toggleRunning">
+          {{ running ? 'Stop' : 'Start' }}
+        </v-btn>
       </v-container>
     </main>
   </v-app>
@@ -22,7 +25,8 @@
         count: 0,
         totalCount: 1,
         time: performance.now(),
-        timeSignature: '4/4'
+        timeSignature: '4/4',
+        soundReady: false,
       };
     },
     computed: {
@@ -37,7 +41,9 @@
       }
     },
     watch: {
-      bpm: 'reset'
+      bpm: 'reset',
+      beats: 'reset',
+      measure: 'reset'
     },
     mounted() {
       const frame = () => {
@@ -53,12 +59,20 @@
     methods: {
       toggleRunning() {
         this.running = !this.running;
-        this.reset();
+        
+        if (this.running) {
+          metronomeUpSound.play();
+          setTimeout(() => metronomeSound.play(), this.interval);
+          this.set(2);
+        }
+      },
+      set(count) {
+        this.totalCount = count;
+        this.count = count;
+        this.time = performance.now();
       },
       reset() {
-        this.totalCount = 1;
-        this.count = 0;
-        this.time = performance.now();
+        this.set(0);
       },
       tick() {
         if (!this.running) {
