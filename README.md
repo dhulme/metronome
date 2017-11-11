@@ -1,4 +1,4 @@
-# metronome
+# Metronome
 
 > A free, easy to use Metronome written in Vue 
 

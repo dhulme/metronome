@@ -145,6 +145,10 @@
   };
 </script>
 
+<style lang="stylus">
+  @import '../node_modules/vuetify/src/stylus/app';
+</style>
+
 <style>
   .checkbox {
     margin-top: 1rem;
@@ -152,11 +156,11 @@
   }
 
   .input-group label {
-    transition: none;
+    transition: none !important;
   }
 
   .input-group__details:before {
-    transition: none;
+    transition: none !important;
   }
 
   .about-link {
@@ -166,7 +170,4 @@
 </style>
 
 
-<style lang="stylus">
-  @import '../node_modules/vuetify/src/stylus/app';
-</style>
 
