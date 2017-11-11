@@ -15,12 +15,23 @@
 </template>
 
 <script>
+  import VApp from 'vuetify/es5/components/VApp';
+  import VContainer from 'vuetify/es5/components/VGrid/VContainer';
+  import VTextField from 'vuetify/es5/components/VTextField';
+  import VBtn from 'vuetify/es5/components/VBtn';
+
   const metronomeSound = new Audio('./static/metronome.wav');
   const metronomeUpSound = new Audio('./static/metronome-up.wav');
 
   const TAP_TEMPO_RESET_TIME = 2000;
 
   export default {
+    components: {
+      VApp,
+      VContainer,
+      VTextField,
+      VBtn,
+    },
     data() {
       return {
         bpm: 128,
@@ -120,6 +131,6 @@
   };
 </script>
 
-<style>
-
+<style lang="stylus">
+  @import '../node_modules/vuetify/src/stylus/app';
 </style>
