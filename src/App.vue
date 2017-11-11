@@ -10,6 +10,7 @@
         </v-btn>
         <v-btn large color="secondary" @click="tapTempo">Tap tempo</v-btn>
         <v-checkbox label="Flash" v-model="enableBackground" class="checkbox"></v-checkbox>
+        <a href="https://github.com/dhulme/metronome/blob/master/README.md" class="about-link">About</a>
       </v-container>
     </main>
   </v-app>
@@ -156,6 +157,11 @@
 
   .input-group__details:before {
     transition: none;
+  }
+
+  .about-link {
+    position: absolute;
+    bottom: 2rem;
   }
 </style>
 

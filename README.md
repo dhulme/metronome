@@ -1,6 +1,16 @@
 # metronome
 
-> A Vue.js project
+> A free, easy to use Metronome written in Vue 
+
+I couldn't find a free, clean, metronome app, so decided to make my own.
+
+## Features
+- Adjustable time signature and BPM 
+- Optional flashing background
+- Tap tempo
+
+## Credit
+Metronome icon adapted from icon by Pavel Diatchenko from the Noun Project.
 
 ## Build Setup
 
@@ -13,9 +23,4 @@ npm run dev
 
 # build for production with minification
 npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
-
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
