@@ -1,17 +1,20 @@
 <template>
-  <v-app>
-    <main>
-      <v-container>
-        <h1>Metronome</h1>
-        <v-text-field v-model="timeSignature" label="Time Signature"></v-text-field>
-        <v-text-field v-model="bpm" label="BPM" type="number"></v-text-field>
-        <v-btn color="primary" large @click="toggleRunning">
-          {{ running ? 'Stop' : 'Start' }}
-        </v-btn>
-        <v-btn large @click="tapTempo">Tap tempo</v-btn>
-      </v-container>
-    </main>
-  </v-app>
+  <div class="background" :data-tick="backgroundActive && enableBackground">
+    <v-app>
+      <main>
+        <v-container>
+          <h1>Metronome</h1>
+          <v-text-field v-model="timeSignature" label="Time Signature"></v-text-field>
+          <v-text-field v-model="bpm" label="BPM" type="number"></v-text-field>
+          <v-btn color="primary" large @click="toggleRunning">
+            {{ running ? 'Stop' : 'Start' }}
+          </v-btn>
+          <v-btn large color="secondary" @click="tapTempo">Tap tempo</v-btn>
+          <v-checkbox label="Flash" v-model="enableBackground" class="checkbox"></v-checkbox>
+        </v-container>
+      </main>
+    </v-app>
+  </div>
 </template>
 
 <script>
@@ -19,6 +22,7 @@
   import VContainer from 'vuetify/es5/components/VGrid/VContainer';
   import VTextField from 'vuetify/es5/components/VTextField';
   import VBtn from 'vuetify/es5/components/VBtn';
+  import VCheckbox from 'vuetify/es5/components/VCheckbox';
 
   const metronomeSound = new Audio('./static/metronome.wav');
   const metronomeUpSound = new Audio('./static/metronome-up.wav');
@@ -31,6 +35,7 @@
       VContainer,
       VTextField,
       VBtn,
+      VCheckbox,
     },
     data() {
       return {
@@ -43,7 +48,8 @@
         soundReady: false,
         tapTempoTimes: [],
         tapTempoTime: null,
-        tapTempoLastTime: null,
+        backgroundActive: false,
+        enableBackground: true,
       };
     },
     computed: {
@@ -76,10 +82,15 @@
     methods: {
       toggleRunning() {
         this.running = !this.running;
+        this.tickActive = false;
 
         if (this.running) {
           metronomeUpSound.play();
-          setTimeout(() => metronomeSound.play(), this.interval);
+          this.updateBackground();
+          setTimeout(() => {
+            metronomeSound.play();
+            this.updateBackground();
+          }, this.interval);
           this.set(2);
         }
       },
@@ -104,7 +115,11 @@
         } else {
           metronomeSound.play();
         }
+        this.updateBackground();
         this.count += 1;
+      },
+      updateBackground() {
+        this.backgroundActive = !this.backgroundActive;
       },
       tapTempo() {
         if (!this.running) {
@@ -120,7 +135,7 @@
         this.tapTempoTime = now;
 
         const averageTime = (this.tapTempoTimes.reduce((acc, tap) => {
-          return acc + (tap - this.tapTempoLastTime);
+          return acc + tap;
         }, 0) / this.tapTempoTimes.length) || 0;
 
         if (averageTime !== 0) {
@@ -131,6 +146,23 @@
   };
 </script>
 
+<style>
+  .background[data-tick] {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+
+  .application--light {
+    background: none;
+  }
+
+  .checkbox {
+    margin-top: 1rem;
+    margin-left: 6px;
+  }
+</style>
+
+
 <style lang="stylus">
   @import '../node_modules/vuetify/src/stylus/app';
 </style>
+
