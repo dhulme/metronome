@@ -1,20 +1,18 @@
 <template>
-  <div class="background" :data-tick="backgroundActive && enableBackground">
-    <v-app>
-      <main>
-        <v-container>
-          <h1>Metronome</h1>
-          <v-text-field v-model="timeSignature" label="Time Signature"></v-text-field>
-          <v-text-field v-model="bpm" label="BPM" type="number"></v-text-field>
-          <v-btn color="primary" large @click="toggleRunning">
-            {{ running ? 'Stop' : 'Start' }}
-          </v-btn>
-          <v-btn large color="secondary" @click="tapTempo">Tap tempo</v-btn>
-          <v-checkbox label="Flash" v-model="enableBackground" class="checkbox"></v-checkbox>
-        </v-container>
-      </main>
-    </v-app>
-  </div>
+  <v-app :dark="backgroundActive && enableBackground">
+    <main>
+      <v-container>
+        <h1>Metronome</h1>
+        <v-text-field v-model="timeSignature" label="Time Signature"></v-text-field>
+        <v-text-field v-model="bpm" label="BPM" type="number"></v-text-field>
+        <v-btn color="primary" large @click="toggleRunning">
+          {{ running ? 'Stop' : 'Start' }}
+        </v-btn>
+        <v-btn large color="secondary" @click="tapTempo">Tap tempo</v-btn>
+        <v-checkbox label="Flash" v-model="enableBackground" class="checkbox"></v-checkbox>
+      </v-container>
+    </main>
+  </v-app>
 </template>
 
 <script>
@@ -49,7 +47,7 @@
         tapTempoTimes: [],
         tapTempoTime: null,
         backgroundActive: false,
-        enableBackground: true,
+        enableBackground: false,
       };
     },
     computed: {
@@ -147,17 +145,17 @@
 </script>
 
 <style>
-  .background[data-tick] {
-    background-color: rgba(0, 0, 0, 0.2);
-  }
-
-  .application--light {
-    background: none;
-  }
-
   .checkbox {
     margin-top: 1rem;
     margin-left: 6px;
+  }
+
+  .input-group label {
+    transition: none;
+  }
+
+  .input-group__details:before {
+    transition: none;
   }
 </style>
 
